@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/lineicons.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/materialdesignicons.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/fullcalendar.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <link rel="shortcut icon" href="{% static 'assets/images/logo/logo.png' %}" type="image/x-icon"/>
+</head>
+<style>
+    .active_state > a{
+        background-color: #5c76fb !important;
+        color: #FFFF !important;
+    }
+</style>
+{% block specific_pagecss %}
+{% endblock %}
+<body>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+{% include 'includes/member/sidebar.html' %}
+
+    <main class="main-wrapper">  
+    {% include 'includes/member/header.html' %}
+
+    <section class="section">
+        <div class="container-fluid">
+            <div class="title-wrapper pt-30">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                    <div class="title">
+                        <h2>{% block page_header_name %}{% endblock %}</h2>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                        {% block page_nav %}{% endblock %}
+                        </nav>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+    </main>
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/js/dynamic-pie-chart.js' %}"></script>
+    <script src="{% static 'assets/js/moment.min.js' %}"></script>
+    <script src="{% static 'assets/js/fullcalendar.js' %}"></script>
+    <script src="{% static 'assets/js/jvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/js/world-merc.js' %}"></script>
+    <script src="{% static 'assets/js/polyfill.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    {% block specific_pagejs %}
+
+    {% endblock %}
+</body>
+</html>

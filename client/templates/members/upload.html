@@ -1,0 +1,183 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Upload Files{% endblock %}
+
+{% block specific_pagecss %}
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+<style>
+
+.dropzone {
+    border: 2px dashed #ccc;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 2px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.dz-message {
+    font-size: 20px;
+}
+
+.dz-preview {
+    margin: 15px;
+    display: inline-block;
+}
+
+.dz-filename {
+    font-size: 16px;
+}
+
+.dz-remove {
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block page_header_name %}Upload Files{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#0">File Uploader</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        Upload File
+    </li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+<div class="card-style px-0 mb-30">
+    <div class="container-fluid">
+        <div class="input-style-1">
+            <label for="uploader">Uploader</label>
+            <input type="text" name="uploader" id="uploader" value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly>
+        </div>
+        <label for="">Upload files according to the required documents per indicator.</label>
+        <form action="{% url 'upload_file' %}" class="dropzone" id="mydropzone" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="task_id" id="task_id" value="{{ task_id }}">
+            <div class="fallback">
+                <input type="file" name="file" id="file" multiple>
+            </div>
+        </form>
+        
+        <button type="button" class="main-btn primary-btn square-btn btn-hover" id="submit_document">Save documents</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+Dropzone.autoDiscover = false;
+var myDropzone = new Dropzone("#mydropzone", {
+    url: "{% url 'upload_file' %}",
+    paramName: "file",
+    maxFilesize: 10,
+    maxFiles: 10,
+    dictDefaultMessage: "Drop maximum of 10 files per upload & wait while uploading the files",
+    acceptedFiles: ".doc, .docx, .pdf, .xls, .xlsx, .png, .jpg, jpeg",
+    addRemoveLinks: true,
+    autoProcessQueue: false,
+    parallelUploads: 10,
+    init: function(){
+            this.on("addedfile", function (file) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'You have successfully added the files, please click the upload button to save the files',
+                    icon: 'success',
+                    confirmButtonText: 'Confirm',
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
+                return;
+            });
+
+            this.on("sending", function (file, xhr, formData) {
+                formData.append("task_id", document.getElementById("task_id").value);
+            });
+
+            this.on("success", function(file, response) {
+                switch (response.message) {
+                    case 'invalid_file':
+                        Swal.fire({
+                            title: 'Oppsss!',
+                            text: 'The file you are trying to uplaod is invalid, please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'Confirm',
+                            timer: 2000,
+                            timerProgressBar: true,
+                        })
+                        break;
+                    case 'uploaded':
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'You have successfully uploaded the files, thank you!',
+                            icon: 'success',
+                            confirmButtonText: 'Confirm',
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+
+                        setTimeout(function(){
+                            myDropzone.removeAllFiles();
+                        },5000);
+
+                        break;
+                    default:
+                        Swal.fire({
+                            title: 'Warning!',
+                            text: 'Unexpected error reponse from the server!',
+                            icon: 'warning',
+                            confirmButtonText: 'Confirm',
+                            timer: 2000,
+                            timerProgressBar: true,
+                        })
+                        break;
+                }
+            });
+
+    }
+
+});
+
+myDropzone.on("error", function (file, errorMessage, xhr) {
+    var error = JSON.parse(errorMessage);
+    Swal.fire({
+        title: 'Warning!',
+        text: 'File uplaod error, please try again!',
+        icon: 'warning',
+        confirmButtonText: 'Confirm',
+        timer: 2000,
+        timerProgressBar: true,
+    })
+});
+
+document.getElementById("submit_document").addEventListener("click", function(e){
+    e.preventDefault()
+    Swal.fire({
+        title: "Upload Confirmation",
+        text: "Are you sure the file is correctly reviewed?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Confirm my upload!",
+        timer: 5000,
+        timerProgressBar: true,
+    }).then((result) => {
+    if (result.isConfirmed) {
+        myDropzone.processQueue();
+    }
+    });
+});
+
+</script>
+{% endblock %}

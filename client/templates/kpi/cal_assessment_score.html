@@ -1,0 +1,182 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Key Performance Indicator Calculator{% endblock %}
+
+{% block page_header_name %}Key Performance Calculator{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#0">Key Performance Calculator</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        KIP Calculator
+    </li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+<div class="tab-style-3 card-style mb-30">
+  <div class="success-alert">
+    <div class="alert">
+      <h4 class="alert-heading">Tip</h4>
+      <p class="text-medium">
+        Please ensure the data you have entered in this form is correct as human error cannot be rectified.
+      </p>
+    </div>
+  </div>
+  <nav class="nav" id="nav-tab">
+    <button id="tab-3-1" class="main-btn deactive-btn active" data-bs-toggle="tab"
+      data-bs-target="#tabContent-3-1">
+      <i class="lni lni-home mr-10"></i>
+      Assessment Score
+    </button>
+  </nav>
+  <div class="tab-content" id="nav-tabContent3">
+    <div class="tab-pane fade show active" id="tabContent-3-1">
+      <!-- DONE -->
+      <form method="POST" action="{% url 'assessment_score' %}">
+        {% csrf_token %}
+          <div class="row">
+            <div class="col">
+              {{ sub_total }}
+              <div class="select-style-1">
+                <label for="{{ form.principle.id_for_label }}">{{ form.principle.label | striptags }}<small class="text-danger">* required</small> </label>
+                <div class="select-position">
+                  {{ form.principle }}
+                </div>
+              </div>
+              </div>
+              <div class="col">
+                  <div class="select-style-1">
+                      <label for="{{ form.weight.id_for_label }}">{{ form.weight.label | striptags }} <small class="text-danger">* required</small> </label>
+                      <div class="select-position">
+                        {{ form.weight }}
+                      </div>
+                    </div>
+              </div>
+      
+          </div>
+
+          <div class="row">
+              <div class="col">
+                  <div class="input-style-1">
+                      <label for="{{ form.principle_score.id_for_label }}">{{ form.principle_score.label | striptags }}</label>
+                      {{ form.principle_score }}
+                    </div>
+              </div>
+      
+              <div class="col">
+                  <div class="input-style-1">
+                      <label for="{{ form.cumulative_score.id_for_label }}">{{ form.cumulative_score.label | striptags }}</label>
+                      {{ form.cumulative_score }}
+                  </div>
+              </div>
+          </div>
+
+          <div class="input-style-1">
+              <label for="{{ form.result.id_for_label }}">{{ form.result.label | striptags }}</label>
+              {{ form.result }}
+          </div>
+
+         </div>
+         <button type="button" id="calculateScore" class="main-btn primary-btn square-btn btn-hover">Calculate Assessment Score</button>
+         <button type="submit" class="main-btn success-btn square-btn btn-hover" id="saveButton">Save</button>
+       </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+  $("#saveButton").css('display','none')
+
+  $(document).on("change","#id_weight", function(e){
+    if(e.target.value == "30"){
+      $("#id_principle option:contains('LEADERSHIP')").prop('selected',true)
+    }
+
+    if(e.target.value == "25"){
+      $("#id_principle option:contains('ACCOUNTABILITY')").prop('selected',true)
+    }
+
+    if(e.target.value == "15"){
+      $("#id_principle option:contains('RESOURCE MANAGEMENT')").prop('selected',true)
+    }
+
+  });
+
+  $(document).on("change","#id_principle", function(e){
+    if(e.target.value == "LEADERSHIP"){
+      $("#id_weight option:contains('30')").prop('selected',true)
+    }
+
+    if(e.target.value == "CURRICULUM & LEARNING"){
+      $("#id_weight option:contains('30')").prop('selected',true)
+    }
+
+    if(e.target.value == "ACCOUNTABILITY"){
+      $("#id_weight option:contains('25')").prop('selected',true)
+    }
+
+
+    if(e.target.value == "RESOURCE MANAGEMENT"){
+      $("#id_weight option:contains('15')").prop('selected',true)
+    }
+  });
+
+  $(document).on("click","#calculateScore", function(){
+    var score = $("#{{ form.principle_score.id_for_label }}")
+    var principle = $("#{{ form.principle.id_for_label }}")
+    var weight = $("#{{ form.weight.id_for_label }}")
+    var cumulative_score = $("#{{ form.cumulative_score.id_for_label }}")
+    var result = $("#{{ form.result.id_for_label }}")
+
+    if(score.val() == ""){
+      Swal.fire({
+        title: "Required field",
+        text: "Principle score field is required, please try again.",
+        icon: "warning",
+        timer: 5000,
+        timerProgressBar: true,
+      });
+    }
+    $("#saveButton").css('display','inline')
+    switch (principle.val()) {
+        case 'LEADERSHIP':
+          cumulative_score.val((parseFloat(score.val())/5).toFixed(2))
+          result.val(((parseFloat(cumulative_score.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+
+        case 'CURRICULUM & LEARNING':
+          cumulative_score.val((parseFloat(score.val())/7).toFixed(2))
+          result.val(((parseFloat(cumulative_score.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+        
+        case 'ACCOUNTABILITY':
+          cumulative_score.val((parseFloat(score.val())/5).toFixed(2))
+          result.val(((parseFloat(cumulative_score.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+
+        case 'RESOURCE MANAGEMENT':
+          cumulative_score.val((parseFloat(score.val())/5).toFixed(2))
+          result.val(((parseFloat(cumulative_score.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+    
+        default:
+            Swal.fire({
+                title: "Invalid Value",
+                text: "Sorry you have an invalid value, please try again",
+                icon: "error",
+                timer: 5000,
+                timerProgressBar: true,
+            });
+        break;
+    }
+  });
+</script>
+{% endblock %}

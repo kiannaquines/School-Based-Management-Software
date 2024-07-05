@@ -1,0 +1,30 @@
+{% extends './_remove.html' %}
+
+
+{% block title %}Remove {{ object.first_name }} {{ object.last_name }}{% endblock %}
+
+
+{% block page_header_name %}
+Remove User
+{% endblock %}
+
+{% block form_header %}Are you sure you want to delete the user <b>"{{ object.username }}"</b> ?{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Users</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Remove User
+  </li>
+</ol>
+{% endblock %}
+
+{% block delete_content %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="main-btn btn-sm danger-btn">Confirm Delete</button>
+        <a href="{% url 'user_list' %}" class="main-btn btn-sm success-btn">No, Cancel</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends './_forms.html' %}
+{% load static %}
+{% block title %}Add New Task - Matalam SBM{% endblock %}
+{% block specific_pagecss %}
+<link href="{% static 'django_ckeditor_5/dist/styles.css' %}" media="all" rel="stylesheet">
+<style>
+  .ck-editor__editable[role="textbox"] {          
+    min-height: 200px;
+  }
+</style>
+{% endblock %}
+{% block page_header_name %}
+Add New Task
+{% endblock %}
+
+{% block form_header %}Task Information{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Task</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Add New Task
+  </li>
+</ol>
+{% endblock %}
+
+
+{% block error_message %}
+  {% if errors %}
+    <div class="alert-box danger-alert">
+      {% for error_list in errors.values %}
+        <div class="alert">
+          <h4 class="alert-heading">Oppsss</h4>
+          <p class="text-medium">
+            {{ error_list }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="alert-box success-alert">
+    {% for message in messages %}
+      {% if message.extra_tags == "added_new_user" %}
+        <div class="alert">
+          <h4 class="alert-heading">Success</h4>
+          <p class="text-medium">
+            {{ message }}
+          </p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block form %}
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="input-style-2">
+    <label id="{{ form.task_name.id_for_label }}">{{ form.task_name.label }}</label>
+    {{ form.task_name }}
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.task_description.id_for_label }}">{{ form.task_description.label }}</label>
+    {{ form.task_description }}
+  </div>
+
+  <div class="select-style-1">
+    <label id="{{ form.assigned_by.id_for_label }}">{{ form.assigned_by.label }}</label>
+    <div class="select-position">
+      {{ form.assigned_by }}
+    </div>
+  </div>
+
+  <div class="select-style-1">
+    <label id="{{ form.assigned_to.id_for_label }}">{{ form.assigned_to.label }}</label>
+    <div class="select-position">
+      {{ form.assigned_to }}
+    </div>
+  </div>
+
+  <div class="input-style-1">
+    <label id="{{ form.task_due.id_for_label }}">{{ form.task_due.label }}</label>
+      {{ form.task_due }}
+  </div>
+
+  <div class="select-style-1">
+    <label id="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+    <div class="select-position">
+      {{ form.status }}
+    </div>
+  </div>
+
+
+  <div class="d-flex gap-5">
+    <div class="form-check checkbox-style mb-20">
+        {{ form.is_active }}
+        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+      </div>
+    
+      <div class="form-check checkbox-style mb-20">
+        {{ form.task_status }}
+        <label class="form-check-label" for="{{ form.task_status.id_for_label }}">{{ form.task_status.label }}</label>
+      </div>
+  </div>
+
+  <button type="submit" class="main-btn primary-btn square-btn btn-hover">Save new task</button>
+</form>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+{% endblock %}

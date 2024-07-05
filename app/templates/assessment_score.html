@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard - Matalam SBM{% endblock %}
+
+
+{% block page_header_name %}
+Assessment Score
+{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Assessment Score</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Assessment Score List
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- End Col -->
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <div class="title d-flex flex-wrap align-items-center justify-content-between">
+          <div class="left">
+            <h6 class="text-medium mb-30">Available Data</h6>
+          </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          <table class="table top-selling-table">
+            <thead>
+              <tr>
+                <th>
+                  <h6 class="text-sm text-medium">Principle Name</h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Weight <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Principle Score <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Cummulative Score <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Result <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width text-center">
+                  <h6 class="text-sm text-medium">
+                    Description <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width text-center">
+                  <h6 class="text-sm text-medium">
+                    Rating <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if assessment_list %}
+              {% for assessment in assessment_list %}
+              <tr>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.leadership.principle }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.leadership.weight }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.leadership.principle_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.leadership.cumulative_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.leadership.result }}
+                  </p>
+                </td>
+                <td rowspan="4"  style="border-left: 1px solid #eeee;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <span class="status-btn success-btn">
+                      {{ assessment.description }}
+                    </span>
+                  </div>
+                </td>
+                <td rowspan="4"  style="border-right: 1px solid #eeee; border-left: 1px solid #eeee;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <span class="status-btn success-btn">
+                      {{ assessment.rating }} %
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.curriculum.principle }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.curriculum.weight }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.curriculum.principle_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.curriculum.cumulative_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.curriculum.result }}
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.accountability.principle }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.accountability.weight }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.accountability.principle_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.accountability.cumulative_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.accountability.result }}
+                  </p>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.management.principle }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.management.weight }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.management.principle_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.management.cumulative_score }}
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm">
+                    {{ assessment.management.result }}
+                  </p>
+                </td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="7">
+                  <p class="text-sm text-center">No Assessment Score Available</p>
+                </td>
+              </tr>
+              {% endif %}
+             
+            </tbody>
+          </table>
+          <!-- End Table -->
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+          <div class="left">
+
+          </div>
+          <div class="right">
+            <nav>
+              <ul class="base-pagination pagination">
+                  {% if assessment_list.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ assessment_list.previous_page_number }}">
+                        <i class="lni lni-angle-double-left"></i>
+                      </a></li>
+                  {% endif %}
+          
+                  {% for page_num in assessment_list.paginator.page_range %}
+                      <li class="page-item {% if assessment_list.number == page_num %}active_state{% endif %}">
+                          <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                      </li>
+                  {% endfor %}
+                  
+                  {% if assessment_list.has_next %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ assessment_list.next_page_number }}">
+                            <i class="lni lni-angle-double-right"></i>
+                          </a>
+                      </li>
+                  {% endif %}
+              </ul>
+          </nav>
+          </div> 
+        </div>
+      </div>
+    </div>
+    <!-- End Col -->
+  </div>
+{% endblock %}

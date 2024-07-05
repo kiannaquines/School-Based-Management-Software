@@ -1,0 +1,704 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Dashboard - Matalam SBM{% endblock %}
+
+{% block page_header_name %}
+Dashboard
+{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Progress Indicator
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Dropout -->
+  <div class="col-lg-6">
+    <div class="card-style mb-20">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Dropout Progress Tracker</h6>
+        </div>
+        <div class="right">
+          <div class="select-style-1 mb-2">
+            <div class="select-position select-sm">
+              <select class="bg-ligh" name="dropout_data" id="dropout_data">
+                {% for year in efficiency_school_years %}
+                <option value="{{ year.id }}">{{ year.drop_school_year_one }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <!-- end select -->
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <canvas id="DropoutChart" style="width: 100%; height: 420px; margin-left: -35px;"></canvas>
+      </div>
+      <!-- End Chart -->
+    </div>
+  </div>
+  <!-- NAT -->
+  <div class="col-lg-6">
+    <div class="card-style mb-20">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">National Achievement Test Progress Tracker</h6>
+        </div>
+        <div class="right">
+          <div class="select-style-1 mb-2">
+            <div class="select-position select-sm">
+              <select class="bg-ligh" name="nationAchievementTestTracking" id="nationAchievementTestTracking">
+                {% for year in quality_school_years %}
+                <option value="{{ year.id }}">{{ year.quality_school_year_one }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <!-- end select -->
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <canvas id="NatChart" style="width: 100%; height: 420px; margin-left: -35px;"></canvas>
+      </div>
+      <!-- End Chart -->
+    </div>
+  </div>
+  <!-- Enrollment -->
+  <div class="col-lg-6">
+    <div class="card-style mb-20">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Enrollment Progress Tracker</h6>
+        </div>
+        <div class="right">
+          <div class="select-style-1 mb-2">
+            <div class="select-position select-sm">
+              <select class="bg-ligh" id="accessEnrollment" name="accessEnrollment">
+                {% for year in access_school_years %}
+                <option value="{{ year.id }}">{{ year.school_year_one }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <canvas id="EnrollmentChart" style="width: 100%; height: 420px; margin-left: -35px;"></canvas>
+      </div>
+      <!-- End Chart -->
+    </div>
+  </div>
+  <!-- Graduation -->
+  <div class="col-lg-6">
+    <div class="card-style mb-20">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Graduation Progress Tracker</h6>
+        </div>
+        <div class="right">
+          <div class="select-style-1 mb-2">
+            <div class="select-position select-sm">
+              <select class="bg-ligh" id="graduatesTracker" name="graduatesTracker">
+                {% for year in graduation_school_years %}
+                <option value="{{ year.id }}">{{ year.graduation_school_year_one }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <!-- end select -->
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <canvas id="GraduationChart" style="width: 100%; height: 420px; margin-left: -35px;"></canvas>
+      </div>
+      <!-- End Chart -->
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script>
+const dropoutChart = document.getElementById("DropoutChart").getContext("2d");
+const dropoutChartConfig = new Chart(dropoutChart, {
+  type: "bar",
+  data: {
+      labels: ["2019-2020", "2020-2021", "2021-2022"],
+      datasets: [
+        {
+          label: "",
+          backgroundColor: ["#d50100", "#365CF5", "#f2994a"],
+          borderColor: "transparent",
+          borderWidth: 5,
+          data: [0,0,0],
+          pointHoverBorderWidth: 3,
+          pointBorderWidth: 5,
+          borderRadius: 15,
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          fill: false,
+          tension: 0.4,
+        },
+      ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        backgroundColor: "#F3F6F8",
+        titleColor: "#8F92A1",
+        titleFontSize: 12,
+        bodyColor: "#171717",
+        bodyFont: {
+          weight: "bold",
+          family: "Plus Jakarta Sans",
+          size: 16,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 30,
+          y: 10,
+        },
+        bodyAlign: "center",
+        titleAlign: "center",
+        enabled: true,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    title: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 30,
+          max: 100,
+          min: 0,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+document.querySelector("#dropout_data").addEventListener("change", function(e){
+    var data = e.target.value
+
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST','{% url "dropout_tracker" %}',true)
+    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+    xhr.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4 && xhr.status === 200){
+        var response = JSON.parse(xhr.responseText)
+
+        var data = {
+          'sy_one': response['data']['school_year_one'].dropout_sy_one,
+          'sy_two': response['data']['school_year_two'].dropout_sy_two,
+          'sy_three': response['data']['school_year_three'].dropout_sy_three,
+
+          'rate_one': response['data']['school_year_one'].rate,
+          'rate_two': response['data']['school_year_two'].rate,
+          'rate_three': response['data']['school_year_three'].rate,
+        }
+
+        dropoutChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three,]
+        dropoutChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three,]
+        dropoutChartConfig.update()
+      }
+    }
+    xhr.send(`id=${data}`)
+});
+
+const enrollmentChart = document.getElementById("EnrollmentChart").getContext("2d");
+const enrollmentChartConfig = new Chart(enrollmentChart, {
+  type: "bar",
+  data: {
+    labels: ["2018-2019", "2019-2020", "2020-2021"],
+    datasets: [
+      {
+        label: "",
+        backgroundColor: ["#d50100", "#365CF5", "#f2994a"],
+        borderColor: "transparent",
+        borderWidth: 5,
+        borderRadius: 15,
+        data: [0,0,0],
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        backgroundColor: "#F3F6F8",
+        titleColor: "#8F92A1",
+        titleFontSize: 12,
+        bodyColor: "#171717",
+        bodyFont: {
+          weight: "bold",
+          family: "Plus Jakarta Sans",
+          size: 16,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 30,
+          y: 10,
+        },
+        bodyAlign: "center",
+        titleAlign: "center",
+        enabled: true,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    title: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+          max: 100,
+          min: 0,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+
+document.querySelector("#accessEnrollment").addEventListener("change", function(e){
+  var data = e.target.value;
+
+  var xhr = new XMLHttpRequest()
+  xhr.open('POST',"{% url 'enrollment_tracker' %}",true)
+  xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhr.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4 && xhr.status === 200){
+      var response = JSON.parse(xhr.responseText)
+      var data = {
+          'sy_one': response['data']['enrollment_year_one'].sy,
+          'sy_two': response['data']['enrollment_year_two'].sy,
+          'sy_three': response['data']['enrollment_year_three'].sy,
+
+          'rate_one': response['data']['enrollment_year_one'].rate,
+          'rate_two': response['data']['enrollment_year_two'].rate,
+          'rate_three': response['data']['enrollment_year_three'].rate,
+      }
+      enrollmentChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three,]
+      enrollmentChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three,]
+      enrollmentChartConfig.update()
+    }
+  }
+  xhr.send(`id=${data}`)
+});
+
+const natChart = document.getElementById("NatChart").getContext("2d");
+const natChartConfig = new Chart(natChart, {
+  type: "bar",
+  data: {
+    labels: ["2018-2019", "2019-2020", "2020-2021"],
+    datasets: [
+      {
+        label: "",
+        backgroundColor: ["#d50100", "#365CF5", "#f2994a"],
+        borderColor: "transparent",
+        borderWidth: 5,
+        borderRadius: 15,
+        data: [0,0,0],
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        backgroundColor: "#F3F6F8",
+        titleColor: "#8F92A1",
+        titleFontSize: 12,
+        bodyColor: "#171717",
+        bodyFont: {
+          weight: "bold",
+          family: "Plus Jakarta Sans",
+          size: 16,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 30,
+          y: 10,
+        },
+        bodyAlign: "center",
+        titleAlign: "center",
+        enabled: true,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    title: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+          max: 100,
+          min: 0,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+
+document.querySelector("#nationAchievementTestTracking").addEventListener("change", function(e){
+  var data = e.target.value;
+
+  var xhr = new XMLHttpRequest()
+  xhr.open('POST','{% url "nat_tracker" %}',true)
+  xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhr.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+
+  xhr.onreadystatechange = function(){
+    if(xhr.status === 200 && xhr.readyState == 4){
+      var response = JSON.parse(xhr.responseText)
+
+      var data = {
+          'sy_one': response['data']['school_year_one'].nat_sy_one,
+          'sy_two': response['data']['school_year_two'].nat_sy_two,
+          'sy_three': response['data']['school_year_three'].nat_sy_three,
+
+          'rate_one': response['data']['school_year_one'].rate,
+          'rate_two': response['data']['school_year_two'].rate,
+          'rate_three': response['data']['school_year_three'].rate,
+      }
+
+      natChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three,]
+      natChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three,]
+
+      natChartConfig.update()
+    }
+  }
+  xhr.send(`id=${data}`)
+});
+
+const graduationChart = document.getElementById("GraduationChart").getContext("2d");
+const graduationChartConfig = new Chart(graduationChart, {
+  type: "bar",
+  data: {
+    labels: ["2018-2019", "2019-2020", "2020-2021"],
+    datasets: [
+      {
+        label: "",
+        backgroundColor: ["#d50100", "#365CF5", "#f2994a"],
+        borderColor: "transparent",
+        borderWidth: 5,
+        borderRadius: 15,
+        data: [0,0,0],
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        backgroundColor: "#F3F6F8",
+        titleColor: "#8F92A1",
+        titleFontSize: 12,
+        bodyColor: "#171717",
+        bodyFont: {
+          weight: "bold",
+          family: "Plus Jakarta Sans",
+          size: 16,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 30,
+          y: 10,
+        },
+        bodyAlign: "center",
+        titleAlign: "center",
+        enabled: true,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    title: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+          max: 100,
+          min: 0,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+document.querySelector("#graduatesTracker").addEventListener("change", function(e){
+  var data = e.target.value;
+
+  var xhr = new XMLHttpRequest()
+  xhr.open('POST','{% url "graduates_tracker" %}',true)
+  xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhr.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+
+  xhr.onreadystatechange = function(){
+    if(xhr.status === 200 && xhr.readyState == 4){
+      var response = JSON.parse(xhr.responseText)
+
+      var data = {
+          'sy_one': response['data']['graduates_year_one'].sy,
+          'sy_two': response['data']['graduates_year_two'].sy,
+          'sy_three': response['data']['graduates_year_three'].sy,
+
+          'rate_one': response['data']['graduates_year_one'].rate,
+          'rate_two': response['data']['graduates_year_two'].rate,
+          'rate_three': response['data']['graduates_year_three'].rate,
+      }
+
+      graduationChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three,]
+      graduationChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three,]
+      graduationChartConfig.update()
+    }
+  }
+  xhr.send(`id=${data}`)
+});
+
+window.onload = function(){
+  var dropout = document.querySelector("#dropout_data").value
+  var graduates = document.querySelector("#graduatesTracker").value
+  var access = document.querySelector("#accessEnrollment").value
+  var nat = document.querySelector("#nationAchievementTestTracking").value
+
+  // Dropout XHR  
+  var xhrDropout = new XMLHttpRequest()
+  xhrDropout.open('POST','{% url "dropout_tracker" %}',true)
+  xhrDropout.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhrDropout.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+  xhrDropout.onreadystatechange = function(){
+    if(xhrDropout.readyState === 4 && xhrDropout.status === 200){
+      var response = JSON.parse(xhrDropout.responseText);
+
+      var data = {
+        'sy_one': response['data']['school_year_one'].dropout_sy_one,
+        'sy_two': response['data']['school_year_two'].dropout_sy_two,
+        'sy_three': response['data']['school_year_three'].dropout_sy_three,
+
+        'rate_one': response['data']['school_year_one'].rate,
+        'rate_two': response['data']['school_year_two'].rate,
+        'rate_three': response['data']['school_year_three'].rate,
+      }
+
+      dropoutChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three]
+      dropoutChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three]
+      dropoutChartConfig.update()
+    }
+  }
+  xhrDropout.send(`id=${dropout}`)
+
+  var xhrGraduate = new XMLHttpRequest()
+  xhrGraduate.open('POST','{% url "graduates_tracker" %}',true)
+  xhrGraduate.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhrGraduate.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+  xhrGraduate.onreadystatechange = function(){
+    if(xhrGraduate.readyState === 4 && xhrGraduate.status === 200){
+      var response = JSON.parse(xhrGraduate.responseText);
+
+      var data = {
+        'sy_one': response['data']['graduates_year_one'].sy,
+        'sy_two': response['data']['graduates_year_two'].sy,
+        'sy_three': response['data']['graduates_year_three'].sy,
+
+        'rate_one': response['data']['graduates_year_one'].rate,
+        'rate_two': response['data']['graduates_year_two'].rate,
+        'rate_three': response['data']['graduates_year_three'].rate,
+      }
+
+      graduationChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three]
+      graduationChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three]
+      graduationChartConfig.update()
+    }
+  }
+  xhrGraduate.send(`id=${graduates}`)
+
+  var xhrAccess = new XMLHttpRequest()
+  xhrAccess.open('POST','{% url "enrollment_tracker" %}',true)
+  xhrAccess.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhrAccess.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+  xhrAccess.onreadystatechange = function(){
+    if(xhrAccess.readyState === 4 && xhrAccess.status === 200){
+      var response = JSON.parse(xhrAccess.responseText);
+
+      var data = {
+          'sy_one': response['data']['enrollment_year_one'].sy,
+          'sy_two': response['data']['enrollment_year_two'].sy,
+          'sy_three': response['data']['enrollment_year_three'].sy,
+          'rate_one': response['data']['enrollment_year_one'].rate,
+          'rate_two': response['data']['enrollment_year_two'].rate,
+          'rate_three': response['data']['enrollment_year_three'].rate,
+      }
+
+      enrollmentChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three]
+      enrollmentChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three]
+      enrollmentChartConfig.update()
+
+    }
+  }
+  xhrAccess.send(`id=${access}`)
+
+  var xhrNat = new XMLHttpRequest()
+  xhrNat.open('POST','{% url "nat_tracker" %}',true)
+  xhrNat.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+  xhrNat.setRequestHeader('X-CSRFToken','{{ csrf_token }}')
+  xhrNat.onreadystatechange = function(){
+    if(xhrNat.readyState === 4 && xhrNat.status === 200){
+      var response = JSON.parse(xhrNat.responseText);
+
+      var data = {
+          'sy_one': response['data']['school_year_one'].nat_sy_one,
+          'sy_two': response['data']['school_year_two'].nat_sy_two,
+          'sy_three': response['data']['school_year_three'].nat_sy_three,
+
+          'rate_one': response['data']['school_year_one'].rate,
+          'rate_two': response['data']['school_year_two'].rate,
+          'rate_three': response['data']['school_year_three'].rate,
+      }
+
+      natChartConfig.data.labels = [data.sy_one,data.sy_two,data.sy_three,]
+      natChartConfig.data.datasets[0].data = [data.rate_one,data.rate_two,data.rate_three,]
+
+      natChartConfig.update()
+    }
+  }
+  xhrNat.send(`id=${nat}`)
+}
+
+</script>
+{% endblock %}

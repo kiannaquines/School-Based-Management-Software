@@ -1,0 +1,178 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Task - Matalam SBM{% endblock %}
+
+
+{% block page_header_name %}
+Task
+{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Manage Task</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Member Task
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- End Col -->
+    <div class="col-lg-12">
+    {% for message in messages %}
+      {% if message.extra_tags == "added_task" or message.extra_tags == "update_task" or message.extra_tags == "delete_task" %}
+      <div class="alert-box success-alert">
+        <div class="alert">
+          <h4 class="alert-heading">Horrayy</h4>
+          <p class="text-medium">
+            {{ message }}
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if message.extra_tags == "already_verified" %}
+      <div class="alert-box success-alert">
+        <div class="alert">
+          <h4 class="alert-heading">Oppsss</h4>
+          <p class="text-medium">
+            {{ message }}
+          </p>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <div class="title d-flex flex-wrap align-items-center justify-content-between">
+          <div class="left">
+            <h6 class="text-medium mb-30">Available Task</h6>
+          </div>
+        </div>
+        <!-- End Title -->
+        <div class="table-responsive">
+          <table class="table top-selling-table">
+            <thead>
+              <tr>
+                <th>
+                  <h6 class="text-sm text-medium">Task Name</h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Assigned By <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Assigned To <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Task Status <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Document Status <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                <th class="min-width">
+                  <h6 class="text-sm text-medium">
+                    Date Added <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+                <th>
+                  <h6 class="text-sm text-medium text-end">
+                    Actions <i class="lni lni-arrows-vertical"></i>
+                  </h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if created_task %}
+              {% for task in created_task %}
+              <tr>
+                <td>
+                  <div class="product">
+                    <p class="text-sm">
+                      <a href="" style="font-weight: 600;">{{ task.task_name }}</a>
+                    </p>
+                  </div>
+                </td>
+                <td>
+                  <p class="text-sm">{{ task.assigned_by }}</p>
+                </td>
+                <td>
+                  <p class="text-sm">{{ task.assigned_to }}</p>
+                </td>
+                <td>
+                  <span class="status-btn {% if task.task_status %}success{% elif task.task_status == False %}close{% endif %}-btn">{% if task.task_status %}Done{% elif task.task_status == False %}On Process{% endif %}</span>
+                </td>
+                <td>
+                    <span class="status-btn {% if task.status == 'VERIFIED' %}success{% elif task.status == 'PENDING' %}close{% endif %}-btn">{% if task.status == 'VERIFIED' %}VERIFIED{% elif task.status == 'PENDING' %}PENDING{% endif %}</span>
+                  </td>
+                <td>
+                  <p class="text-sm">{{ task.task_date_added }}</p>
+                </td>
+                <td>
+                  <div class="action justify-content-center gap-2">
+                    <a href="{% url 'edit_task' task_id=task.id %}" class="main-btn btn-sm primary-btn-group active">Update</a>
+                    <a href="{% url 'remove_task' task_id=task.id %}" class="main-btn btn-sm danger-btn-group active">Remove</a>
+                    <a href="{% url 'verify_task' task_id=task.id %}" class="main-btn btn-sm success-btn-group active">Verify</a>
+                  </div> 
+                </td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="7">
+                  <p class="text-sm text-center">No Task Available</p>
+                </td>
+              </tr>
+              {% endif %}
+             
+             
+            </tbody>
+          </table>
+          <!-- End Table -->
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+          <div class="left">
+
+          </div>
+          <div class="right">
+            <nav>
+              <ul class="base-pagination pagination">
+                  {% if user_list.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ user_list.previous_page_number }}">
+                        <i class="lni lni-angle-double-left"></i>
+                      </a></li>
+                  {% endif %}
+          
+                  {% for page_num in user_list.paginator.page_range %}
+                      <li class="page-item {% if user_list.number == page_num %}active_state{% endif %}">
+                          <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                      </li>
+                  {% endfor %}
+                  
+                  {% if user_list.has_next %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ user_list.next_page_number }}">
+                            <i class="lni lni-angle-double-right"></i>
+                          </a>
+                      </li>
+                  {% endif %}
+              </ul>
+          </nav>
+          </div> 
+        </div>
+      </div>
+    </div>
+    <!-- End Col -->
+  </div>
+{% endblock %}

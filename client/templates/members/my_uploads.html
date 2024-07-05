@@ -1,0 +1,114 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}My Documents{% endblock %}
+{% load app_tags %}
+{% block page_header_name %}
+My Document Manager
+{% endblock %} {% block form_header %}My SBM Documents{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">My Document Manager</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Documents
+  </li>
+</ol>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-style">
+            <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                <div class="left">
+                  <h6 class="text-medium mb-30">Documents</h6>
+                </div>
+            </div>
+            <div class="row">
+              {% if documents %}
+              {% for document in documents %}
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                  <div class="card-style-6 mb-30">
+                    <div class="card-meta mb-25">
+                      <div class="d-flex align-items-center justify-content-between flex-wrap mb-10">
+                        <span class="mr-15">
+                          <span style="display: block; font-size: 13px;">{{ document.date_uploaded }}</span>
+                          <small style="font-size: 10px; display: block;">Date uploaded</small>
+                        </span>
+                        <a href="{% url 'download_file' document_id=document.id %}">
+                          <img src="{% static 'assets/images/download.png' %}" title="Download {{ document.document_name }}" alt="Download {{ document.document_name }}">
+                        </a>
+                      </div>
+                      <p>{{ document.document_name|truncatechars:17 }}</p>
+                    </div>
+                    <div class="card-image d-flex justify-content-center">
+                      {% if document.document_type == "pdf"  %}
+                      <a href="{% url 'view_pdf' document_id=document.id %}">
+                      {% else %}
+                      <a href="{% url 'download_file' document_id=document.id %}">
+                      {% endif %}
+
+                      {% if document.document_type == "docx" %}
+                      <img src="{% static 'assets/images/file_img/doc.png' %}" alt="{{ document.document_name }}" title="{{ document.document_name }}" class="img-fluid" style="width: 150px; height: 150px; object-fit: cover;"/>
+                      {% elif document.document_type == "pdf"  %}
+                      <img src="{% static 'assets/images/file_img/pdf.png' %}" alt="{{ document.document_name }}" title="{{ document.document_name }}" class="img-fluid" style="width: 150px; height: 150px; object-fit: cover;"/>
+                      {% else %}
+                      <img src="{% static 'assets/images/file_img/excel.png' %}" alt="{{ document.document_name }}" title="{{ document.document_name }}" class="img-fluid" style="width: 150px; height: 150px; object-fit: cover;"/>
+                      {% endif %}
+                      </a>
+                    </div>
+                    <div class="card-action d-flex justify-content-between align-items-center" style="font-size: 10px;">
+                      <div class="action mr-15">
+                        <button><i class="lni lni-empty-file"></i></button>
+                        <a href="#0" title="File size {{ document.document_size|convert_bytes_to_mb|floatformat:2 }} MB ">{{ document.document_size|convert_bytes_to_mb|floatformat:2 }} MB</a>
+                      </div>
+                      <div class="action">
+                        <button><i class="lni lni-download"></i></button>
+                        <a href="#0" title="Download count 12">{{ document.download_count }} Save</a>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="d-flex justify-content-center align-items-center">
+                <img src="{% static 'assets/images/file searching empty.svg' %}" width="350" height="350" alt="No File" style="display: block;">
+              </div>
+              <div class="d-flex justify-content-center">
+                <a style="display: block; font-size: 24px; font-weight: 500;">No Uploaded Files</a>
+              </div>
+              {% endif %}
+            </div>
+
+            {% if documents %}
+            <nav>
+              <ul class="base-pagination pagination">
+                {% if documents.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ documents.previous_page_number }}">
+                    <i class="lni lni-angle-double-left"></i>
+                  </a></li>
+                {% endif %}
+        
+                {% for page_num in documents.paginator.page_range %}
+                  <li class="page-item {% if documents.number == page_num %}active_state{% endif %}">
+                      <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                  </li>
+                {% endfor %}
+                
+                {% if documents.has_next %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{ documents.next_page_number }}">
+                        <i class="lni lni-angle-double-right"></i>
+                      </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block page_header_name %}{% endblock %}
+
+{% block page_nav %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- End Col -->
+    <div class="col-lg-12">
+      {% block error_message %}{% endblock %}
+      <div class="card-style mb-30">
+        <div class="title d-flex flex-wrap align-items-center justify-content-between">
+          <div class="left">
+            <h6 class="text-medium mb-30">{% block form_header %}{% endblock %}</h6>
+          </div>
+        </div>
+        {% block form %}
+
+        {% endblock %}
+      </div>
+    </div>
+    <!-- End Col -->
+  </div>
+{% endblock %}

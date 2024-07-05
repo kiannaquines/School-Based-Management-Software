@@ -1,0 +1,579 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Key Performance Indicator Calculator{% endblock %}
+
+{% block page_header_name %}Key Performance Calculator{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#0">Key Performance Calculator</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        KIP Calculator
+    </li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+<div class="tab-style-3 card-style mb-30">
+  <nav class="nav" id="nav-tab">
+    <button id="tab-3-1" class="main-btn deactive-btn" data-bs-toggle="tab"
+      data-bs-target="#tabContent-3-1">
+      <i class="lni lni-home mr-10"></i>
+      Access 45%
+    </button>
+    <button id="tab-3-2" class="main-btn deactive-btn" data-bs-toggle="tab"
+      data-bs-target="#tabContent-3-2">
+      <i class="lni lni-layout mr-10"></i>
+      Efficiency 25%
+    </button>
+    <button id="tab-3-3" class="main-btn deactive-btn" data-bs-toggle="tab"
+      data-bs-target="#tabContent-3-3">
+      <i class="lni lni-layers mr-10"></i>
+      Quality 30%
+    </button>
+  </nav>
+  <div class="tab-content" id="nav-tabContent3">
+    <div class="tab-pane fade" id="tabContent-3-1">
+
+      {% for message in messages %}
+        {% if message.extra_tags == "school_year_one_error" or  message.extra_tags == "school_year_two_error" or  message.extra_tags == "school_year_three_error"%}
+        <div class="danger-alert">
+          <div class="alert">
+            <h4 class="alert-heading">Oppss</h4>
+            <p class="text-medium">
+              {{ message }}
+            </p>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+
+      <!-- DONE -->
+      <form method="POST" action="{% url 'access_form_manage' %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col">
+            <div class="select-style-1">
+              <label for="{{ access_form.school_year_one.id_for_label }}">{{ access_form.school_year_one.label | striptags }}<small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ access_form.school_year_one }}
+              </div>
+            </div>
+            <div class="select-style-1">
+              <label for="{{ access_form.school_year_two.id_for_label }}">{{ access_form.school_year_two.label | striptags }} <small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ access_form.school_year_two }}
+              </div>
+            </div>
+            <div class="select-style-1">
+              <label for="{{ access_form.school_year_three.id_for_label }}">{{ access_form.school_year_three.label | striptags }}<small class="text-danger">* required</small></label>
+              <div class="select-position">
+                {{ access_form.school_year_three }}
+              </div>
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.average.id_for_label }}">{{ access_form.average.label | striptags }}</label>
+              {{ access_form.average }}
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-style-1">
+              <label for="{{ access_form.enrollment_increase_one.id_for_label }}">{{ access_form.enrollment_increase_one.label | striptags }} <small class="text-danger">* required</small></label>
+              {{ access_form.enrollment_increase_one }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.enrollment_increase_two.id_for_label }}">{{ access_form.enrollment_increase_two.label | striptags }} <small class="text-danger">* required</small></label>
+              {{ access_form.enrollment_increase_two }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.enrollment_increase_three.id_for
+              _label }}">{{ access_form.enrollment_increase_three.label | striptags }} <small class="text-danger">* required</small></label>
+              {{ access_form.enrollment_increase_three }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.final_result.id_for_label }}">{{ access_form.final_result.label | striptags }}</label>
+              {{ access_form.final_result }}
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <div class="input-style-1">
+                  <label for="percent_one" style="opacity: 0;">% of Inc</label>
+                  <input type="number" id="percent_one_one" placeholder="% of Inc" readonly style="opacity: 0;">
+                </div>
+              </div>
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.percent_increase_two.id_for_label }}">{{ access_form.percent_increase_two.label | striptags }}</label>
+              {{ access_form.percent_increase_two }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ access_form.percent_increase_three.id_for_label }}">{{ access_form.percent_increase_three.label | striptags }}</label>
+              {{ access_form.percent_increase_three }}
+            </div>      
+          </div>
+         </div>
+         <button type="button" id="calculateAccess" class="main-btn primary-btn square-btn btn-hover">Calculate Access Area</button>
+         <button type="submit" class="main-btn success-btn square-btn btn-hover" id="saveButton">Save</button>
+       </form>
+    </div>
+    <div class="tab-pane fade" id="tabContent-3-2">
+      <div class="tab-style-1 card-style mb-30">
+        <nav class="nav" id="nav-tab">
+          <button id="tab-1-1" data-bs-toggle="tab" data-bs-target="#tabContent-1-1">
+            Dropout Rate
+          </button>
+          <button id="tab-1-2" data-bs-toggle="tab" data-bs-target="#tabContent-1-2">
+            Graduation Rate
+          </button>
+          <button id="tab-1-3" data-bs-toggle="tab" data-bs-target="#tabContent-1-3">
+            Promotion Rate
+          </button>
+        </nav>
+        <form action="{% url 'efficiency_form_manage' %}" method="POST" id="formEfficiency">
+          {% csrf_token %}
+        <div class="tab-content" id="nav-tabContent1">
+          <div class="tab-pane fade" id="tabContent-1-1">
+              <div class="row">
+                <div class="col">
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.drop_school_year_one.id_for_label }}">{{ efficiency.drop_school_year_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.drop_school_year_one }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.drop_school_year_two.id_for_label }}">{{ efficiency.drop_school_year_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.drop_school_year_two }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.drop_school_year_three.id_for_label }}">{{ efficiency.drop_school_year_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      <div class="select-position">
+                        {{ efficiency.drop_school_year_three }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_average.id_for_label }}">{{ efficiency.drop_average.label | striptags }} </label>
+                    {{ efficiency.drop_average }}
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_dropoutrate_one.id_for_label }}">{{ efficiency.drop_dropoutrate_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.drop_dropoutrate_one }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_dropoutrate_two.id_for_label }}">{{ efficiency.drop_dropoutrate_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.drop_dropoutrate_two }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_dropoutrate_three.id_for_label }}">{{ efficiency.drop_dropoutrate_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.drop_dropoutrate_three }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_percent_decrease.id_for_label }}">{{ efficiency.drop_percent_decrease.label | striptags }} </label>
+                    {{ efficiency.drop_percent_decrease }}
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="input-style-1">
+                        <label for="percent_one" style="opacity: 0;">% of Inc</label>
+                        <input type="number" id="percent_one_one" placeholder="% of Inc" readonly style="opacity: 0;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-style-1">
+                  
+                    <label for="{{ efficiency.drop_percent_increase_two.id_for_label }}">{{ efficiency.drop_percent_increase_two.label | striptags }} </label>
+                    {{ efficiency.drop_percent_increase_two }}
+
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.drop_percent_increase_three.id_for_label }}">{{ efficiency.drop_percent_increase_three.label | striptags }} </label>
+                    {{ efficiency.drop_percent_increase_three }}
+                  </div> 
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.dropout_base_line_status.id_for_label }}">{{ efficiency.dropout_base_line_status.label | striptags }} </label>
+                    {{ efficiency.dropout_base_line_status }}
+                  </div>     
+                </div>
+               </div>          
+               <button type="button" id="calculateDropout" class="main-btn primary-btn square-btn btn-hover">Calculate Dropout Rate</button>
+               <button type="button" id="nextGraduationRate" class="main-btn success-btn square-btn btn-hover">Next Step</button>
+          </div>
+          <div class="tab-pane fade" id="tabContent-1-2">
+              <div class="row">
+                <div class="col">
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.graduation_school_year_one.id_for_label }}">{{ efficiency.graduation_school_year_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.graduation_school_year_one }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.graduation_school_year_two.id_for_label }}">{{ efficiency.graduation_school_year_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.graduation_school_year_two }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.graduation_school_year_three.id_for_label }}">{{ efficiency.graduation_school_year_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.graduation_school_year_three }}
+                    </div>
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_rate_average.id_for_label }}">{{ efficiency.graduation_rate_average.label | striptags }} </label>
+                    {{ efficiency.graduation_rate_average }}
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_rate_one.id_for_label }}">{{ efficiency.graduation_rate_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.graduation_rate_one }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_rate_two.id_for_label }}">{{ efficiency.graduation_rate_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.graduation_rate_two }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_rate_three.id_for_label }}">{{ efficiency.graduation_rate_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.graduation_rate_three }}
+                  </div>
+                  
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_increase_average.id_for_label }}">{{ efficiency.graduation_increase_average.label | striptags }} </label>
+                    {{ efficiency.graduation_increase_average }}
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="input-style-1">
+                        <label for="percent_one" style="opacity: 0;">% of Inc</label>
+                        <input type="number" id="percent_one_one" placeholder="% of Inc" readonly style="opacity: 0;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_increase_per_two.id_for_label }}">{{ efficiency.graduation_increase_per_two.label | striptags }} </label>
+                    {{ efficiency.graduation_increase_per_two }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_increase_per_three.id_for_label }}">{{ efficiency.graduation_increase_per_three.label | striptags }} </label>
+                    {{ efficiency.graduation_increase_per_three }}
+                  </div>  
+                  
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.graduation_base_line_status.id_for_label }}">{{ efficiency.graduation_base_line_status.label | striptags }} </label>
+                    {{ efficiency.graduation_base_line_status }}
+                  </div>  
+                </div>
+               </div>
+               <button type="button" id="calculateGraduation" class="main-btn primary-btn square-btn btn-hover">Calculate Graduation Efficiency Rate</button>
+               <button type="button" id="nextPromotionRate" class="main-btn success-btn square-btn btn-hover">Next Step</button>
+          </div>
+          <div class="tab-pane fade" id="tabContent-1-3">
+              <div class="row">
+                <div class="col">
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.promotion_school_year_one.id_for_label }}">{{ efficiency.promotion_school_year_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.promotion_school_year_one }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.promotion_school_year_two.id_for_label }}">{{ efficiency.promotion_school_year_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.promotion_school_year_two }}
+                    </div>
+                  </div>
+                  <div class="select-style-1">
+                    <label for="{{ efficiency.promotion_school_year_three.id_for_label }}">{{ efficiency.promotion_school_year_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ efficiency.promotion_school_year_three }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="input-style-1">
+                        <label for="{{ efficiency.promotion_rate_average.id_for_label }}">{{ efficiency.promotion_rate_average.label | striptags }} </label>
+                    {{ efficiency.promotion_rate_average }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_rate_one.id_for_label }}">{{ efficiency.promotion_rate_one.label | striptags }} <small class="text-danger">* required</small> </label>
+                        {{ efficiency.promotion_rate_one }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_rate_two.id_for_label }}">{{ efficiency.promotion_rate_two.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.promotion_rate_two }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_rate_three.id_for_label }}">{{ efficiency.promotion_rate_three.label | striptags }} <small class="text-danger">* required</small> </label>
+                    {{ efficiency.promotion_rate_three }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_increase_average.id_for_label }}">{{ efficiency.promotion_increase_average.label | striptags }} </label>
+                        {{ efficiency.promotion_increase_average }}
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <div class="input-style-1">
+                        <label for="{{ efficiency.sub_total.id_for_label }}">{{ efficiency.sub_total.label | striptags }}</label>
+                        {{ efficiency.sub_total }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_increase_per_two.id_for_label }}">{{ efficiency.promotion_increase_per_two.label | striptags }} </label>
+                    {{ efficiency.promotion_increase_per_two }}
+                  </div>
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_increase_per_three.id_for_label }}">{{ efficiency.promotion_increase_per_three.label | striptags }} </label>
+                    {{ efficiency.promotion_increase_per_three }}
+                  </div> 
+                  <div class="input-style-1">
+                    <label for="{{ efficiency.promotion_base_line_status.id_for_label }}">{{ efficiency.promotion_base_line_status.label | striptags }} </label>
+                    {{ efficiency.promotion_base_line_status }}
+                  </div>
+                  
+                </div>
+               </div>
+               <button type="button" id="calculatePromotion" class="main-btn primary-btn square-btn btn-hover">Calculate Efficiency Of Promotion Rate</button>
+               <button type="submit" class="main-btn success-btn square-btn btn-hover" id="saveButton">Save Efficiency Rate</button>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="tabContent-3-3">
+      <!-- DONE -->
+      <form action="{% url 'quality_form_manage' %}" method="POST">
+        {% csrf_token%}
+        <div class="row">
+          <div class="col">
+            <div class="select-style-1">
+              <label for="{{ quality_form.quality_school_year_one.id_for_label }}">{{ quality_form.quality_school_year_one.label | striptags }} <small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ quality_form.quality_school_year_one }}
+              </div>
+            </div>
+            <div class="select-style-1">
+              <label for="{{ quality_form.quality_school_year_two.id_for_label }}">{{ quality_form.quality_school_year_two.label | striptags }} <small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ quality_form.quality_school_year_two }}
+              </div>
+            </div>
+            <div class="select-style-1">
+              <label for="{{ quality_form.quality_school_year_three.id_for_label }}">{{ quality_form.quality_school_year_three.label | striptags }} <small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ quality_form.quality_school_year_three }}
+              </div>
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_average.id_for_label }}">{{ quality_form.quality_rate_average.label | striptags }} </label>
+                    {{ quality_form.quality_rate_average }}
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_one.id_for_label }}">{{ quality_form.quality_rate_one.label | striptags }} <small class="text-danger">* required</small> </label>
+              {{ quality_form.quality_rate_one }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_two.id_for_label }}">{{ quality_form.quality_rate_two.label | striptags }} <small class="text-danger">* required</small> </label>
+              {{ quality_form.quality_rate_two }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_three.id_for_label }}">{{ quality_form.quality_rate_three.label | striptags }} <small class="text-danger">* required</small> </label>
+              {{ quality_form.quality_rate_three }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_average_percentage.id_for_label }}">{{ quality_form.quality_rate_average_percentage.label | striptags }} </label>
+                    {{ quality_form.quality_rate_average_percentage }}
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <div class="input-style-1">
+                  <label for="percent_one" style="opacity: 0;">% of Inc</label>
+                  <input type="number" id="percent_one_one" placeholder="% of Inc" readonly style="opacity: 0;">
+                </div>
+              </div>
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_two_percentage.id_for_label }}">{{ quality_form.quality_rate_two_percentage.label | striptags }} </label>
+              {{ quality_form.quality_rate_two_percentage }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_rate_three_percentage.id_for_label }}">{{ quality_form.quality_rate_three_percentage.label | striptags }} </label>
+              {{ quality_form.quality_rate_three_percentage }}
+            </div>
+            <div class="input-style-1">
+              <label for="{{ quality_form.quality_final_result.id_for_label }}">{{ quality_form.quality_final_result.label | striptags }} </label>
+              {{ quality_form.quality_final_result }}
+            </div>      
+          </div>
+         </div>
+    
+         <button type="button" id="calculateQuality" class="main-btn primary-btn square-btn btn-hover">Calculate Quality Rate</button>
+         <button type="submit" class="main-btn success-btn square-btn btn-hover" id="saveButton">Save</button>
+       </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'assets/js/efficiency.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if(window.location.pathname == "{% url 'improvement' %}" && urlParams.get('status') === "complete"){
+    Swal.fire({
+      title: "Success",
+      text: "You have successfully finish all the steps in calculating the key performance indicators.",
+      icon: "success",
+    });
+
+    window.onload = function() {
+
+      party.confetti(document.body, {
+        count: party.variation.range(100, 150),
+        size: party.variation.range(0.6, 1.4),
+        speed: party.variation.range(50, 300),
+      });
+
+      urlParams.delete('status')
+      setTimeout(function(){
+        window.history.replaceState({}, document.title, window.location.pathname);
+      },3000);
+    };
+  }
+
+  if(window.location.pathname == "{% url 'improvement' %}" && urlParams.get('page') == null){
+    $("#tab-3-1").addClass('active')
+    $("#tab-3-2").attr('disabled','true')
+    $("#tab-3-3").attr('disabled','true')
+    $("#tab-3-4").attr('disabled','true')
+    $("#tabContent-3-1").addClass('show')
+    $("#tabContent-3-1").addClass('active')
+  }
+
+  if(urlParams.get('page') == "efficiency"){
+    $("#tab-3-2").addClass('active')
+    $("#tab-3-1").attr('disabled','true')
+    $("#tab-3-3").attr('disabled','true')
+    $("#tab-3-4").attr('disabled','true')
+
+    $("#tabContent-3-2").addClass('show')
+    $("#tabContent-3-2").addClass('active')
+
+
+    if(urlParams.get('sub') === "dropout" && urlParams.get('step') === '1'){
+     document.getElementById("tab-1-1").className = 'active'
+     document.getElementById("tab-1-2").setAttribute('disabled','true')
+     document.getElementById("tab-1-3").setAttribute('disabled','true')
+     document.getElementById("tabContent-1-1").className = 'show'
+     document.getElementById("tabContent-1-1").className = 'active'
+
+
+     $(document).on("click","#nextGraduationRate", function(){
+        urlParams.set('sub','graduation')
+        urlParams.set('step','2')
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.location.href = newUrl;
+        var myForm = document.getElementById("formEfficiency")
+        var type = document.createElement("input")
+        type.type = 'hidden'
+        type.name = 'nextGraduation'
+        type.value = 'nextGraduation'
+        myForm.appendChild(type)
+        myForm.submit()
+     });
+
+
+    }else if(urlParams.get('sub') === "graduation" && urlParams.get('step') === '2'){
+      document.getElementById("tab-1-2").className = 'active'
+      document.getElementById("tab-1-1").setAttribute('disabled','true')
+      document.getElementById("tab-1-3").setAttribute('disabled','true')
+      document.getElementById("tabContent-1-2").className = 'show'
+      document.getElementById("tabContent-1-2").className = 'active'
+
+
+      $(document).on("click","#nextPromotionRate", function(){
+        urlParams.set('sub','promotion')
+        urlParams.set('step','3')
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.location.href = newUrl;
+        var myForm = document.getElementById("formEfficiency")
+        var type = document.createElement("input")
+        type.type = 'hidden'
+        type.name = 'nextPromotion'
+        type.value = 'nextPromotion'
+        myForm.appendChild(type)
+        myForm.submit()
+     });
+
+    }else if(urlParams.get('sub') === "promotion" && urlParams.get('step') === '3'){
+      document.getElementById("tab-1-3").className = 'active'
+      document.getElementById("tab-1-1").setAttribute('disabled','true')
+      document.getElementById("tab-1-2").setAttribute('disabled','true')
+      document.getElementById("tabContent-1-3").className = 'show'
+      document.getElementById("tabContent-1-3").className = 'active'
+    }else{
+      Swal.fire({
+        title: 'Invalid URL Parameters',
+        text: 'Sorry you have an invalid parameter, the page will exit after closing this window.',
+        icon: 'error',
+        timer: 5000,
+        timerProgressBar: true,
+      }).then(function(dismiss){
+        if(dismiss.isConfirmed == true){
+          window.location.href = "{% url 'index' %}"
+        }else{
+          window.location.href = "{% url 'index' %}"
+        }
+      })
+    }
+  }
+
+  if(urlParams.get('page') == "quality"){
+    $("#tab-3-3").addClass('active')
+    $("#tab-3-1").attr('disabled','true')
+    $("#tab-3-2").attr('disabled','true')
+    $("#tab-3-4").attr('disabled','true')
+
+    $("#tabContent-3-3").addClass('show')
+    $("#tabContent-3-3").addClass('active')
+  }
+
+  if(urlParams.get('page') == "final"){
+    $("#tab-3-4").addClass('active')
+    $("#tab-3-1").attr('disabled','true')
+    $("#tab-3-2").attr('disabled','true')
+    $("#tab-3-3").attr('disabled','true')
+
+    $("#tabContent-3-4").addClass('show')
+    $("#tabContent-3-4").addClass('active')
+  }
+</script>
+{% endblock %}

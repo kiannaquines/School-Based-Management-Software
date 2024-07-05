@@ -1,0 +1,101 @@
+{% extends './_forms.html' %}
+{% load static %}
+{% block title %}Add New User - Matalam SBM{% endblock %}
+
+{% block page_header_name %}
+Add New User
+{% endblock %}
+
+{% block form_header %}User Information{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Users</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Add New User
+  </li>
+</ol>
+{% endblock %}
+
+
+{% block error_message %}
+  {% if errors %}
+  <div class="alert-box danger-alert">
+    {% for error_list in errors.values %}
+      <div class="alert">
+        <h4 class="alert-heading">Oppsss</h4>
+        <p class="text-medium">
+          {{ error_list }}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="alert-box success-alert">
+    {% for message in messages %}
+      {% if message.extra_tags == "added_new_user" %}
+        <div class="alert">
+          <h4 class="alert-heading">Success</h4>
+          <p class="text-medium">
+            {{ message }}
+          </p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block form %}
+
+<form method="post">
+  {% csrf_token %}
+  <div class="input-style-2">
+    <label id="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+    {{ form.username }}
+    <span class="icon"> <i class="lni lni-user"></i> </span>
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+    {{ form.first_name }}
+    <span class="icon"> <i class="lni lni-user"></i> </span>
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+    {{ form.last_name }}
+    <span class="icon"> <i class="lni lni-user"></i> </span>
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+    {{ form.email }}
+    <span class="icon"> <i class="lni lni-email"></i> </span>
+  </div>
+
+  <div class="select-style-1">
+    <label id="{{ form.user_role.id_for_label }}">{{ form.user_role.label }}</label>
+    <div class="select-position">
+      {{ form.user_role }}
+    </div>
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+    {{ form.password1 }}
+    <small id="{{ form.password1.id_for_label }}-help" class="form-text text-muted" style="font-size: 12px;">
+      {{ form.password1.help_text }}
+    </small>
+  </div>
+
+  <div class="input-style-2">
+    <label id="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+    {{ form.password2 }}
+  </div>
+
+  <button type="submit" class="main-btn primary-btn square-btn btn-hover">Save new user</button>
+</form>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Media Manager - Matalam SBM{% endblock %}
+{% load app_tags %}
+
+
+{% block specific_pagecss %}
+<link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery-bundle.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/css/lg-thumbnail.min.css"/>
+{% endblock %}
+
+{% block page_header_name %}
+Media Manager
+{% endblock %}
+
+{% block form_header %}SBM Documents{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Media Manager</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Media List
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-style">
+            <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                <div class="left">
+                  <h6 class="text-medium mb-30">Available Media</h6>
+                </div>
+            </div>
+
+            <div id="lightgallery">
+            <div class="row">
+                {% if medias %}
+                {% for media in medias %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card-style-6 mb-30">
+                      <div class="card-meta mb-25">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap mb-10">
+                          <span class="mr-15">
+                            <span style="display: block; font-size: 13px;">{{ media.date_uploaded }}</span>
+                            <small style="font-size: 10px; display: block;">Date uploaded</small>
+                          </span>
+                          <a href="{{ media.document.url }}">
+                            <img src="{% static 'assets/images/download.png' %}" title="Download {{ media.document_name }}" alt="Download {{ media.document_name }}">
+                          </a>
+                        </div>
+                        <p>{{ media.document_name|truncatechars:25 }}</p>
+                      </div>
+                      <div class="card-image d-flex justify-content-center item" data-src="{{ media.document.url }}">                      
+                        <img src="{{ media.document.url }}" alt="{{ media.document_name }}" title="{{ media.document_name }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;"/>
+                      </div>
+                      <div class="card-action d-flex justify-content-between align-items-center" style="font-size: 10px;">
+                        <div class="action mr-15">
+                          <button><i class="lni lni-empty-file"></i></button>
+                          <a href="#0" title="File size {{ media.document_size|convert_bytes_to_mb|floatformat:2 }} MB ">{{ media.document_size|convert_bytes_to_mb|floatformat:2 }} MB</a>
+                        </div>
+                        <div class="action">
+                          <button><i class="lni lni-arrow-down"></i></button>
+                          <a href="#0" title="Download count {{ media.download_count }}">{{ media.download_count }} Save</a>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img src="{% static 'assets/images/file searching empty.svg' %}" width="350" height="350" alt="No File" style="display: block;">
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <a style="display: block; font-size: 24px; font-weight: 500;">No Uploaded Files</a>
+                  </div>
+                {% endif %}
+              </div>
+
+
+            </div>
+
+            {% if medias > 0 %}
+              <nav>
+                <ul class="base-pagination pagination">
+                  {% if medias.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ medias.previous_page_number }}">
+                        <i class="lni lni-angle-double-left"></i>
+                      </a></li>
+                  {% endif %}
+          
+                  {% for page_num in medias.paginator.page_range %}
+                      <li class="page-item {% if medias.number == page_num %}active_state{% endif %}">
+                          <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                      </li>
+                  {% endfor %}
+                  
+                  {% if medias.has_next %}
+                      <li class="page-item">
+                          <a class="page-link" href="?page={{ medias.next_page_number }}">
+                            <i class="lni lni-angle-double-right"></i>
+                          </a>
+                      </li>
+                  {% endif %}
+                </ul>
+              </nav>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/zoom/lg-zoom.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/rotate/lg-rotate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/share/lg-share.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/pager/lg-pager.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/hash/lg-hash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/comment/lg-comment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/plugins/autoplay/lg-autoplay.min.js"></script>
+<script>
+  const $lgDemoUpdateSlides = document.getElementById(
+      'lightgallery',
+  );
+
+  lightGallery($lgDemoUpdateSlides, {
+    plugins: [lgZoom,lgThumbnail,lgRotate,lgShare,lgPager,lgHash,lgFullscreen,lgComment,lgAutoplay],
+    licenseKey: '0000-0000-000-0000`',
+    selector: '.item',
+    peed: 500,
+    mode: 'lg-fade',
+    enableDrag: true,
+    keyPress : true,
+    mousewheel : true,
+  });
+</script>
+{% endblock %}

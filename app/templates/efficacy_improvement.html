@@ -1,0 +1,740 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %}Dashboard - Matalam SBM{% endblock %}
+
+{% block page_header_name %} Efficacy Improvement {% endblock%}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Efficacy Improvement</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Efficacy Improvement List
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="tab-style-3 card-style mb-30">
+      <nav class="nav" id="nav-tab">
+        <button
+          id="tab-3-1"
+          class="main-btn deactive-btn rounded-full active"
+          data-bs-toggle="tab"
+          data-bs-target="#tabContent-3-1"
+        >
+          <i class="lni lni-home mr-10"></i>
+          Access
+        </button>
+        <button
+          id="tab-3-2"
+          class="main-btn deactive-btn rounded-full"
+          data-bs-toggle="tab"
+          data-bs-target="#tabContent-3-2"
+        >
+          <i class="lni lni-layout mr-10"></i>
+          Efficiency
+        </button>
+        <button
+          id="tab-3-3"
+          class="main-btn deactive-btn rounded-full"
+          data-bs-toggle="tab"
+          data-bs-target="#tabContent-3-3"
+        >
+          <i class="lni lni-layers mr-10"></i>
+          Quality
+        </button>
+      </nav>
+      <div class="tab-content" id="nav-tabContent3">
+        <div class="tab-pane fade show active" id="tabContent-3-1">
+          <!-- End Col -->
+          <div class="col-lg-12">
+            <div
+              class="title d-flex flex-wrap align-items-center justify-content-between"
+            >
+              <div class="left">
+                <h6 class="text-medium mb-30 mt-30">Access Available Data</h6>
+              </div>
+            </div>
+            <!-- End Title -->
+            <div class="table-responsive">
+              <table class="table top-selling-table">
+                <thead>
+                  <tr>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">First Years <i class="lni lni-arrows-vertical"></i></h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Second Years <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Third Years <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Enrollment Increase First SY
+                        <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Enrollment Increase Second SY
+                        <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Enrollment Increase Third SY
+                        <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Final Result <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Interpretation <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if efficacy_list %} {% for interpretation in efficacy_list %}
+                  <tr>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.school_year_one.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.school_year_two.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.school_year_three.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.enrollment_increase_one }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.enrollment_increase_two }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.enrollment_increase_three }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.access.final_result }}
+                      </p>
+                    </td>
+                    <td>
+                      <span class="status-btn success-btn"
+                        >{{ interpretation.description }}</span
+                      >
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                  {% else %}
+                  <tr>
+                    <td colspan="8">
+                      <p class="text-sm text-center">No Enrollment Data Available</p>
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+              <!-- End Table -->
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-center"
+              >
+                <div class="left"></div>
+                <div class="right">
+                  <nav>
+                    <ul class="base-pagination pagination">
+                      {% if efficacy_list.has_previous %}
+                      <li class="page-item">
+                        <a
+                          class="page-link"
+                          href="?page={{ efficacy_list.previous_page_number }}"
+                        >
+                          <i class="lni lni-angle-double-left"></i>
+                        </a>
+                      </li>
+                      {% endif %}
+                      {% for page_num in efficacy_list.paginator.page_range %}
+                      <li
+                        class="page-item {% if efficacy_list.number == page_num %}active_state{% endif %}"
+                      >
+                        <a class="page-link" href="?page={{ page_num }}"
+                          >{{ page_num }}</a
+                        >
+                      </li>
+                      {% endfor %}
+                      
+                      {% if efficacy_list.has_next %}
+                      <li class="page-item">
+                        <a
+                          class="page-link"
+                          href="?page={{ efficacy_list.next_page_number }}"
+                        >
+                          <i class="lni lni-angle-double-right"></i>
+                        </a>
+                      </li>
+                      {% endif %}
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Col -->
+        </div>
+        <div class="tab-pane fade" id="tabContent-3-2">
+        <!-- End Col -->
+        <div class="col-lg-12">
+            <div
+              class="title d-flex flex-wrap align-items-center justify-content-between"
+            >
+              <div class="left">
+                <h6 class="text-medium mb-30 mt-30">Dropout Rate</h6>
+              </div>
+            </div>
+            <!-- End Title -->
+            <div class="table-responsive">
+              <table class="table top-selling-table">
+                <thead>
+                  <tr>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">First School Years <i class="lni lni-arrows-vertical"></i></h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">Second School Years <i class="lni lni-arrows-vertical"></i> </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">Third School Years <i class="lni lni-arrows-vertical"></i></h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Dropout Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Dropout Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Dropout Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Final Result <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Interpretation <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if efficacy_list %} {% for interpretation in efficacy_list %}
+                  <tr>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.drop_school_year_one.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                       {{ interpretation.efficiency.drop_school_year_two.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.drop_school_year_three.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.drop_dropoutrate_one }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.drop_dropoutrate_two }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.drop_dropoutrate_three }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.efficiency.final_result }}
+                      </p>
+                    </td>
+                    <td>
+                      <span class="status-btn success-btn"
+                        >{{ interpretation.description }}</span
+                      >
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                  {% else %}
+                  <tr>
+                    <td colspan="8">
+                      <p class="text-sm text-center">No User Available</p>
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+              <!-- End Table -->
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div
+            class="title d-flex flex-wrap align-items-center justify-content-between"
+          >
+            <div class="left">
+              <h6 class="text-medium mb-30 mt-30">Graduation Rates</h6>
+            </div>
+          </div>
+          <!-- End Title -->
+          <div class="table-responsive">
+            <table class="table top-selling-table">
+              <thead>
+                <tr>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">First School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">Second School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">Third School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Graduation Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Graduation Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Graduation Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Final Result <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Interpretation <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if efficacy_list %} {% for interpretation in efficacy_list %}
+                <tr>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.graduation_school_year_one.school_year }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                     {{ interpretation.efficiency.graduation_school_year_two.school_year }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.graduation_school_year_three.school_year }}
+                    </p>
+                  </td>
+                  
+
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.graduation_rate_one }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.graduation_rate_two }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.graduation_rate_three }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.final_result }}
+                    </p>
+                  </td>
+                  <td>
+                    <span class="status-btn success-btn"
+                      >{{ interpretation.description }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+                
+                {% else %}
+                <tr>
+                  <td colspan="8">
+                    <p class="text-sm text-center">No User Available</p>
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+            <!-- End Table -->
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div
+            class="title d-flex flex-wrap align-items-center justify-content-between"
+          >
+            <div class="left">
+              <h6 class="text-medium mb-30 mt-30">Promotion Rates</h6>
+            </div>
+          </div>
+          <!-- End Title -->
+          <div class="table-responsive">
+            <table class="table top-selling-table">
+              <thead>
+                <tr>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">First School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">Second School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">Third School Years <i class="lni lni-arrows-vertical"></i></h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Promotion Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Promotion Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Promotion Rate <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Final Result <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                  <th class="min-width">
+                    <h6 class="text-sm text-medium">
+                      Interpretation <i class="lni lni-arrows-vertical"></i>
+                    </h6>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if efficacy_list %} {% for interpretation in efficacy_list %}
+                <tr>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.promotion_school_year_one.school_year }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                     {{ interpretation.efficiency.promotion_school_year_two.school_year }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.promotion_school_year_three.school_year }}
+                    </p>
+                  </td>
+                  
+
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.promotion_rate_one }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.promotion_rate_two }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.promotion_rate_three }} %
+                    </p>
+                  </td>
+                  <td>
+                    <p class="text-sm">
+                      {{ interpretation.efficiency.final_result }}
+                    </p>
+                  </td>
+                  <td>
+                    <span class="status-btn success-btn"
+                      >{{ interpretation.description }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+                
+                {% else %}
+                <tr>
+                  <td colspan="8">
+                    <p class="text-sm text-center">No Promotion Data Available</p>
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+            <!-- End Table -->
+          </div>
+          <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div class="left"></div>
+            <div class="right">
+              <nav>
+                <ul class="base-pagination pagination">
+                  {% if efficacy_list.has_previous %}
+                  <li class="page-item">
+                    <a
+                      class="page-link"
+                      href="?page={{ efficacy_list.previous_page_number }}"
+                    >
+                      <i class="lni lni-angle-double-left"></i>
+                    </a>
+                  </li>
+                  {% endif %} {% for page_num in efficacy_list.paginator.page_range %}
+                  <li
+                    class="page-item {% if efficacy_list.number == page_num %}active_state{% endif %}"
+                  >
+                    <a class="page-link" href="?page={{ page_num }}"
+                      >{{ page_num }}</a
+                    >
+                  </li>
+                  {% endfor %}
+                  
+                  {% if efficacy_list.has_next %}
+                  <li class="page-item">
+                    <a
+                      class="page-link"
+                      href="?page={{ efficacy_list.next_page_number }}"
+                    >
+                      <i class="lni lni-angle-double-right"></i>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav>
+          </div>
+        </div>
+        </div>
+        <!-- End Col -->
+        </div>
+        <div class="tab-pane fade" id="tabContent-3-3">
+        <!-- End Col -->
+        <div class="col-lg-12">
+            <div
+              class="title d-flex flex-wrap align-items-center justify-content-between"
+            >
+              <div class="left">
+                <h6 class="text-medium mb-30 mt-30">
+                  National Achievement Test Available Data
+                </h6>
+              </div>
+            </div>
+            <!-- End Title -->
+            <div class="table-responsive">
+              <table class="table top-selling-table">
+                <thead>
+                  <tr>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">First Years <i class="lni lni-arrows-vertical"></i></h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Second Years <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Third Years <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        NAT Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        NAT Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        NAT Rate <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Final Result <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                    <th class="min-width">
+                      <h6 class="text-sm text-medium">
+                        Interpretation <i class="lni lni-arrows-vertical"></i>
+                      </h6>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if efficacy_list %} {% for interpretation in efficacy_list %}
+                  <tr>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_school_year_one.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_school_year_two.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_school_year_three.school_year }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_rate_one }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_rate_two }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_rate_three }} %
+                      </p>
+                    </td>
+                    <td>
+                      <p class="text-sm">
+                        {{ interpretation.quality.quality_final_result }}
+                      </p>
+                    </td>
+                    <td>
+                      <span class="status-btn success-btn"
+                        >{{ interpretation.description }}</span
+                      >
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                  {% else %}
+                  <tr>
+                    <td colspan="8">
+                      <p class="text-sm text-center">No National Achievement Test Available</p>
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+              <!-- End Table -->
+            </div>
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+              <div class="left"></div>
+              <div class="right">
+                <nav>
+                  <ul class="base-pagination pagination">
+                    {% if efficacy_list.has_previous %}
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        href="?page={{ efficacy_list.previous_page_number }}"
+                      >
+                        <i class="lni lni-angle-double-left"></i>
+                      </a>
+                    </li>
+                    {% endif %} {% for page_num in efficacy_list.paginator.page_range %}
+                    <li
+                      class="page-item {% if efficacy_list.number == page_num %}active_state{% endif %}"
+                    >
+                      <a class="page-link" href="?page={{ page_num }}"
+                        >{{ page_num }}</a
+                      >
+                    </li>
+                    {% endfor %} 
+                    {% if efficacy_list.has_next %}
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        href="?page={{ efficacy_list.next_page_number }}"
+                      >
+                        <i class="lni lni-angle-double-right"></i>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+            </div>
+        </div>
+        <!-- End Col -->
+        </div>
+      </div>
+    </div>
+    <!-- end card -->
+  </div>
+
+  
+</div>
+{% endblock %}

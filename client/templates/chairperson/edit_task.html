@@ -1,0 +1,116 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Edit Task - SBM Matalam National High School{% endblock %}
+
+{% block page_header_name %}
+Edit Task
+{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#0">Task</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        Edit Task
+    </li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- End Col -->
+
+    {% for message in messages %}
+        {% if message.extra_tags == "update_task" %}
+        <div class="success-alert">
+            <div class="alert">
+                <h4 class="alert-heading">Success</h4>
+                <p class="text-medium">
+                {{ message }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if message.extra_tags == "update_task_error" %}
+        <div class="danger-alert">
+            <div class="alert">
+                <h4 class="alert-heading">Oppss</h4>
+                <p class="text-medium">
+                {{ message }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <div class="title d-flex flex-wrap align-items-center justify-content-between">
+          <div class="left">
+            <h6 class="text-medium mb-30">Edit Task</h6>
+          </div>
+        </div>
+        <form method="post">
+
+            {{ form.media }}
+            {% csrf_token %}
+            {{ form.hidden_field }}
+            <div class="input-style-2">
+              <label id="{{ form.task_name.id_for_label }}">{{ form.task_name.label }}</label>
+              {{ form.task_name }}
+            </div>
+
+            <div class="select-style-1">
+              <label id="{{ form.principle.id_for_label }}">{{ form.principle.label }}</label>
+              <div class="select-position">
+                {{ form.principle }}
+              </div>
+            </div>
+
+            
+            <div class="input-style-2">
+              <label id="{{ form.task_description.id_for_label }}">{{ form.task_description.label }}</label>
+              {{ form.task_description }}
+            </div>
+          
+            <div class="select-style-1">
+              <label id="{{ form.assigned_to.id_for_label }}">{{ form.assigned_to.label }}</label>
+              <div class="select-position">
+                {{ form.assigned_to }}
+              </div>
+            </div>
+          
+            <div class="input-style-1">
+              <label id="{{ form.task_due.id_for_label }}">{{ form.task_due.label }}</label>
+                {{ form.task_due }}
+            </div>
+          
+            <div class="select-style-1">
+              <label id="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+              <div class="select-position">
+                {{ form.status }}
+              </div>
+            </div>
+          
+          
+            <div class="d-flex gap-5">
+              <div class="form-check checkbox-style mb-20">
+                  {{ form.is_active }}
+                  <label class="form-check-label" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+                </div>
+              
+                <div class="form-check checkbox-style mb-20">
+                  {{ form.task_status }}
+                  <label class="form-check-label" for="{{ form.task_status.id_for_label }}">{{ form.task_status.label }}</label>
+                </div>
+            </div>
+          
+            <button type="submit" class="main-btn primary-btn square-btn btn-hover">Save changes to task</button>
+          </form>
+      </div>
+    </div>
+    <!-- End Col -->
+  </div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Key Performance Indicator Calculator{% endblock %}
+
+{% block page_header_name %}Key Performance Calculator{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#0">Key Performance Calculator</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        KIP Calculator
+    </li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+<div class="tab-style-3 card-style mb-30">
+  <div class="success-alert">
+    <div class="alert">
+      <h4 class="alert-heading">Tip</h4>
+      <p class="text-medium">
+        The system encourages to fill up first the <b>Performance improvement</b> & <b>SBM assessment score</b> before filling up this form, thank you!
+      </p>
+    </div>
+  </div>
+  <nav class="nav" id="nav-tab">
+    <button id="tab-3-1" class="main-btn deactive-btn active" data-bs-toggle="tab"
+      data-bs-target="#tabContent-3-1">
+      <i class="lni lni-home mr-10"></i>
+      Assessment Score
+    </button>
+  </nav>
+  <div class="tab-content" id="nav-tabContent3">
+    <div class="tab-pane fade show active" id="tabContent-3-1">
+      <!-- DONE -->
+      <form method="POST" action="{% url 'myfinal_rating' %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col">
+            <div class="select-style-1">
+              <label for="{{ form.area.id_for_label }}">{{ form.area.label | striptags }}<small class="text-danger">* required</small> </label>
+              <div class="select-position">
+                {{ form.area }}
+              </div>
+            </div>
+            </div>
+            <div class="col">
+                <div class="select-style-1">
+                    <label for="{{ form.weight.id_for_label }}">{{ form.weight.label | striptags }} <small class="text-danger">* required</small> </label>
+                    <div class="select-position">
+                      {{ form.weight }}
+                    </div>
+                  </div>
+            </div>
+    
+        </div>
+
+        <div class="input-style-1">
+            <label for="{{ form.rating.id_for_label }}">{{ form.rating.label | striptags }}</label>
+            {{ form.rating }}
+        </div>
+
+
+
+        <div class="input-style-1">
+            <label for="{{ form.result.id_for_label }}">{{ form.result.label | striptags }}</label>
+            {{ form.result }}
+        </div>
+
+         </div>
+         <button type="button" id="calculateFinalRating" class="main-btn primary-btn square-btn btn-hover">Calculate Improvement Area</button>
+         <button type="submit" class="main-btn success-btn square-btn btn-hover" id="saveButton">Save</button>
+       </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block specific_pagejs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function(){
+    $("#saveButton").css('display','none')
+
+    var area = document.querySelector("#id_area")
+    if(area.value === "Performance Improvement"){
+      document.querySelector("#id_rating").value = "{{ perf_sub_total }}"
+    }
+
+    if(area.value === "SBM Assessment Score (DOD)"){
+      document.querySelector("#id_rating").value = "{{ assess_sub_total }}"
+    }
+  }
+
+  $(document).on("change","#id_weight", function(e){
+    if(e.target.value == "60"){
+      $("#id_area option:contains('Performance Improvement')").prop('selected',true)
+      $("#id_rating").val("{{ perf_sub_total }}")
+    }
+
+    if(e.target.value == "40"){
+      $("#id_area option:contains('SBM Assessment Score (DOD)')").prop('selected',true)
+      $("#id_rating").val("{{ assess_sub_total }}")
+    }
+
+  });
+
+  $(document).on("change","#id_area", function(e){
+    if(e.target.value == "Performance Improvement"){
+      $("#id_weight option:contains('60')").prop('selected',true)
+      $("#id_rating").val("{{ perf_sub_total }}")
+    }
+
+    if(e.target.value == "SBM Assessment Score (DOD)"){
+      $("#id_weight option:contains('40')").prop('selected',true)
+      $("#id_rating").val("{{ assess_sub_total }}")
+    }
+  });
+  $(document).on("click","#calculateFinalRating", function(){
+
+    var area = $("#{{ form.area.id_for_label }}")
+    var weight = $("#{{ form.weight.id_for_label }}")
+    var rating = $("#{{ form.rating.id_for_label }}")
+    var result = $("#{{ form.result.id_for_label }}")
+
+    if(rating.val() == ""){
+      Swal.fire({
+        title: "Required field",
+        text: "Rating field is required, please try again.",
+        icon: "warning",
+        timer: 5000,
+        timerProgressBar: true,
+      });
+    }
+
+    $("#saveButton").css('display','inline')
+
+    switch (area.val()) {
+        case 'Performance Improvement':
+          result.val(((parseFloat(rating.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+
+        case 'SBM Assessment Score (DOD)':
+          result.val(((parseFloat(rating.val()) * parseInt(weight.val())) / 100).toFixed(2))
+        break;
+    
+        default:
+            Swal.fire({
+                title: "Invalid Value",
+                text: "Sorry you have an invalid value, please try again",
+                icon: "error",
+                timer: 5000,
+                timerProgressBar: true,
+            });
+        break;
+    }
+  });
+</script>
+{% endblock %}

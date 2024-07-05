@@ -1,0 +1,121 @@
+{% extends 'auth_base.html' %}
+{% load static %}
+{% block title %}Authentication Login - Matalam National High School SBM{% endblock %}
+
+{% block content %}
+<section class="signin-section mt-3">
+    <div class="container d-flex align-items-center justify-content-center">
+        <div class="row g-0 mt-3">
+          <div class="col-lg-6 mt-3">
+            <div class="auth-cover-wrapper bg-primary-100">
+              <div class="auth-cover">
+                <div class="title text-center">
+                  <h1 class="text-primary mb-10 mt-2">School Based Management - System</h1>
+                  <p class="text-medium">
+                    Sign in with your existing account to continue
+                  </p>
+                </div>
+                <div class="cover-image">
+                  <img src="{% static 'assets/images/auth/sbm.svg' %}" alt="" height="100%"/>
+                </div>
+                <div class="shape-image">
+                  <img src="{% static 'assets/images/auth/shape.svg' %}" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end col -->
+          <div class="col-lg-6 mt-3">
+            <div class="signin-wrapper">
+              <div class="form-wrapper">
+                {% for message in messages %}
+                  {% if message.extra_tags == "register_success" %}
+                  <div class="success-alert">
+                    <div class="alert">
+                      <h4 class="alert-heading">Success</h4>
+                      <p class="text-medium">
+                        {{ message }}
+                      </p>
+                    </div>
+                  </div>
+                  {% endif %}
+  
+                  {% if message.extra_tags == "username_not_exist" or message.extra_tags == "not_activated" %}
+                  <div class="danger-alert">
+                    <div class="alert">
+                      <h4 class="alert-heading">Oppsss</h4>
+                      <p class="text-medium">
+                        {{ message }}
+                      </p>
+                    </div>
+                  </div>
+                  {% endif %}
+  
+                {% endfor %}
+                <h6 class="mb-15">Sign In Form</h6>
+                <p class="text-sm mb-25">
+                  Start creating the best possible user experience for you
+                  customers.
+                </p>
+                <form action="{% url 'auth_login' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label id="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                        {{ form.username }}
+                      </div>
+                    </div>
+                    <!-- end col -->
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label id="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                        {{ form.password }}
+                      </div>
+                    </div>
+                    <!-- end col -->
+                    <div class="col-xxl-6 col-lg-12 col-md-6">
+                      <div class="form-check checkbox-style mb-30">
+                        <input class="form-check-input" type="checkbox" value="" id="checkbox-remember" checked/>
+                        <label class="form-check-label" for="checkbox-remember">
+                          Remember me next time</label>
+                      </div>
+                    </div>
+                    <!-- end col -->
+                    <!-- end col -->
+                    <div class="col-12">
+                      <div class="button-group d-flex justify-content-center flex-wrap">
+                        <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">
+                          Sign In
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end row -->
+                </form>
+
+                <div class="col-12 mt-2">
+                  <div class="button-group d-flex justify-content-center flex-wrap">
+                    <a href="/admin" class="main-btn light-btn btn-hover w-100 text-center">
+                      Go to super admin panel
+                    </a>
+                  </div>
+                </div>
+
+                <div class="singin-option pt-40">
+                  <p class="text-sm text-medium text-dark text-center">
+                    Don’t have any account yet?
+                    <a href="{% url 'auth_register' %}">Create an account</a>
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- end col -->
+        </div>
+      
+      <!-- end row -->
+    </div>
+  </section>
+{% endblock %}

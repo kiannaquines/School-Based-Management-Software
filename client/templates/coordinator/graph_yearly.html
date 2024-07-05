@@ -1,0 +1,711 @@
+{% extends 'member_base.html' %}
+{% load static %}
+{% block title %}Dashboard - Matalam SBM{% endblock %}
+
+{% block page_header_name %}
+Dashboard
+{% endblock %}
+
+{% block page_nav %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#0">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">
+    Key Performance Index
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <div class="col-6">
+    <div class="card-style mb-30">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Increase of Enrollies Every School Year</h6>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <div id="legend3">
+          <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
+            <li>
+              <div class="d-flex">
+                <span class="bg-color primary-bg"> </span>
+                <div class="text">
+                  <p class="text-sm text-success">
+                    <span class="text-dark">Overall School Year Enrollies Increase </span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <canvas id="Chart7" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="card-style mb-30">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Dropout Rate of Every School Year</h6>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <div id="legend3">
+          <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
+            <li>
+              <div class="d-flex">
+                <span class="bg-color primary-bg"> </span>
+                <div class="text">
+                  <p class="text-sm text-success">
+                    <span class="text-dark">Overall Number of Student Dropout </span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <canvas id="dropoutChart" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card-style mb-30">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Graduation Rate of Every School Year</h6>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <div id="legend3">
+          <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
+            <li>
+              <div class="d-flex">
+                <span class="bg-color warning-bg"> </span>
+                <div class="text">
+                  <p class="text-sm text-success">
+                    <span class="text-dark">Overall Graduation Rate Performance </span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <canvas id="graduationChart" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card-style mb-30">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">Promotion Rate of Every School Year</h6>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <div id="legend3">
+          <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
+            <li>
+              <div class="d-flex">
+                <span class="bg-color purple-bg"> </span>
+                <div class="text">
+                  <p class="text-sm text-success">
+                    <span class="text-dark">Overall Promotion Rate Performance </span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <canvas id="promotionChart" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <div class="card-style mb-30">
+      <div class="title d-flex flex-wrap align-items-center justify-content-between">
+        <div class="left">
+          <h6 class="text-medium mb-2">SBM Scoring Matrix Performance Tracking</h6>
+        </div>
+      </div>
+      <!-- End Title -->
+      <div class="chart">
+        <div id="legend3">
+          <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
+            <li>
+              <div class="d-flex">
+                <span class="bg-color purple-bg"></span>
+                <div class="text">
+                  <p class="text-sm text-success">
+                    <span class="text-dark">Efficiency Rating
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex">
+                <span class="bg-color orange-bg"></span>
+                <div class="text">
+                  <p class="text-sm text-danger">
+                    <span class="text-dark">Quality Rating</span>
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="d-flex">
+                <span class="bg-color danger-bg"></span>
+                <div class="text">
+                  <p class="text-sm text-danger">
+                    <span class="text-dark">Access Rating</span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <canvas id="Chart3" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- End Col -->
+ 
+  <!-- End Col -->
+</div>
+<!-- End Row -->
+{% endblock %}
+
+{% block specific_pagejs %}
+<script>
+
+const ctx1 = document.getElementById("Chart7").getContext("2d");
+const chart1 = new Chart(ctx1, {
+  type: "line",
+  data: {
+    labels: {{ enrollment_label | safe }},
+    datasets: [
+      {
+        label: "Increase of Enrollies Every School Year",
+        backgroundColor: "transparent",
+        borderColor: "#365CF5",
+        data: {{ enrollment_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#365CF5",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#365CF5",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        borderWidth: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        intersect: false,
+        backgroundColor: "#fbfbfb",
+        titleColor: "#8F92A1",
+        bodyColor: "#272727",
+        titleFont: {
+          size: 12,
+          family: "Plus Jakarta Sans",
+          weight: "400",
+        },
+        bodyFont: {
+          family: "Plus Jakarta Sans",
+          size: 12,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 25,
+          y: 10,
+        },
+        borderColor: "rgba(143, 146, 161, .1)",
+        borderWidth: 1,
+        enabled: true,
+      },
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+        },
+        max: 1000,
+        min: 0,
+      },
+      x: {
+        grid: {
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          drawTicks: false,
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+  // =========== chart three end
+const ctxDropout = document.getElementById("dropoutChart").getContext("2d");
+const ctxDropout1 = new Chart(ctxDropout, {
+  type: "line",
+  data: {
+    labels: {{ dropout_label | safe }},
+    datasets: [
+      {
+        label: "Dropout Rate",
+        backgroundColor: "transparent",
+        borderColor: "#4e70f6",
+        data: {{ dropout_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#365CF5",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#365CF5",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 15,
+        borderWidth: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        intersect: false,
+        backgroundColor: "#fbfbfb",
+        titleColor: "#8F92A1",
+        bodyColor: "#272727",
+        titleFont: {
+          size: 12,
+          family: "Plus Jakarta Sans",
+          weight: "400",
+        },
+        bodyFont: {
+          family: "Plus Jakarta Sans",
+          size: 12,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 25,
+          y: 10,
+        },
+        borderColor: "rgba(143, 146, 161, .1)",
+        borderWidth: 1,
+        enabled: true,
+      },
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+        },
+        // max: 1000,
+        min: 0,
+      },
+      x: {
+        grid: {
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          drawTicks: false,
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+
+const ctxPromotion = document.getElementById("promotionChart").getContext("2d");
+const ctxPromotion1 = new Chart(ctxPromotion, {
+  type: "bar",
+  data: {
+    labels: {{ promotion_labels | safe }},
+    datasets: [
+      {
+        label: "Dropout Rate",
+        backgroundColor: "#9b51e0",
+        borderColor: "#365CF5",
+        data: {{ promotion_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#365CF5",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#365CF5",
+        borderRadius: 15,
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        intersect: false,
+        backgroundColor: "#fbfbfb",
+        titleColor: "#8F92A1",
+        bodyColor: "#272727",
+        titleFont: {
+          size: 12,
+          family: "Plus Jakarta Sans",
+          weight: "400",
+        },
+        bodyFont: {
+          family: "Plus Jakarta Sans",
+          size: 12,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 25,
+          y: 10,
+        },
+        borderColor: "rgba(143, 146, 161, .1)",
+        borderWidth: 1,
+        enabled: true,
+        callbacks: {
+          label: function(context) {
+            return context.label + ": " + context.parsed.y + "%";
+          },
+        },
+      },
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    // maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+        },
+        // max: 1000,
+        min: 0,
+      },
+      x: {
+        grid: {
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          drawTicks: false,
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+const ctxGraduation = document.getElementById("graduationChart").getContext("2d");
+const ctxGraduation1 = new Chart(ctxGraduation, {
+  type: "bar",
+  data: {
+    labels: {{ graduation_labels | safe }},
+    datasets: [
+      {
+        label: "Dropout Rate",
+        backgroundColor: "#f7c800",
+        borderColor: "#365CF5",
+        data: {{ graduation_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#365CF5",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#365CF5",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        borderRadius: 15,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        intersect: false,
+        backgroundColor: "#fbfbfb",
+        titleColor: "#8F92A1",
+        bodyColor: "#272727",
+        titleFont: {
+          size: 12,
+          family: "Plus Jakarta Sans",
+          weight: "400",
+        },
+        bodyFont: {
+          family: "Plus Jakarta Sans",
+          size: 12,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 25,
+          y: 10,
+        },
+        borderColor: "rgba(143, 146, 161, .1)",
+        borderWidth: 1,
+        enabled: true,
+        callbacks: {
+          label: function(context) {
+            return context.label + ": " + context.parsed.y + "%";
+          },
+        },
+      },
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+        },
+        min: 0,
+      },
+      x: {
+        grid: {
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          drawTicks: false,
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+
+const ctx3 = document.getElementById("Chart3").getContext("2d");
+const chart3 = new Chart(ctx3, {
+  type: "line",
+  data: {
+    labels: {{ graph_labels | safe }},
+    datasets: [
+      {
+        label: "Access Result",
+        backgroundColor: "transparent",
+        borderColor: "#d50100",
+        data: {{ access_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#d50100",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#d50100",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+        borderWidth: 5,
+      },
+      {
+        label: "Quality Result",
+        backgroundColor: "transparent",
+        borderColor: "#f2994a",
+        data: {{ quality_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#f2994a",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#f2994a",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+        borderWidth: 5,
+      },
+      {
+        label: "Efficiency Result",
+        backgroundColor: "transparent",
+        borderColor: "#9b51e0",
+        data: {{ efficiency_values | safe }},
+        pointBackgroundColor: "transparent",
+        pointHoverBackgroundColor: "#9b51e0",
+        pointBorderColor: "transparent",
+        pointHoverBorderColor: "#9b51e0",
+        pointHoverBorderWidth: 3,
+        pointBorderWidth: 5,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        fill: false,
+        tension: 0.4,
+        borderWidth: 5,
+      },
+    ],
+  },
+  options: {
+    plugins: {
+      tooltip: {
+        intersect: false,
+        backgroundColor: "#fbfbfb",
+        titleColor: "#8F92A1",
+        bodyColor: "#272727",
+        titleFont: {
+          size: 12,
+          family: "Plus Jakarta Sans",
+          weight: "400",
+        },
+        bodyFont: {
+          family: "Plus Jakarta Sans",
+          size: 12,
+        },
+        multiKeyBackground: "transparent",
+        displayColors: false,
+        padding: {
+          x: 25,
+          y: 10,
+        },
+        borderColor: "rgba(143, 146, 161, .1)",
+        borderWidth: 1,
+        enabled: true,
+      },
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false,
+      },
+    },
+    layout: {
+      padding: {
+        top: 0,
+      },
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    scales: {
+      y: {
+        grid: {
+          display: false,
+          drawTicks: false,
+          drawBorder: false,
+        },
+        ticks: {
+          padding: 35,
+        },
+        min: 0,
+      },
+      x: {
+        grid: {
+          drawBorder: false,
+          color: "rgba(143, 146, 161, .1)",
+          drawTicks: false,
+          zeroLineColor: "rgba(143, 146, 161, .1)",
+        },
+        ticks: {
+          padding: 20,
+        },
+      },
+    },
+  },
+});
+</script>
+{% endblock %}

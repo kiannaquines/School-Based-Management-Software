@@ -1,0 +1,150 @@
+{% extends 'auth_base.html' %}
+{% load static %}
+{% block title %}Authentication Register - Matalam National High School SBM{% endblock %}
+
+
+{% block content %}
+<section class="signin-section">
+    <div class="container">
+      <div class="row g-0">
+        <div class="col-lg-6">
+          <div class="auth-cover-wrapper bg-primary-100">
+            <div class="auth-cover">
+              <div class="title text-center">
+                <h1 class="text-primary mb-10">School Base Management - System</h1>
+                <p class="text-medium">
+                  Sign up your account to continue
+                </p>
+              </div>
+              <div class="cover-image">
+                <img src="{% static 'assets/images/auth/sbm.svg' %}" alt="" />
+              </div>
+              <div class="shape-image">
+                <img src="{% static 'assets/images/auth/shape.svg' %}" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end col -->
+        <div class="col-lg-6">
+          <div class="signin-wrapper">
+            <div class="form-wrapper">
+              <div class="alert-box danger-alert">
+              {% for message in messages %}
+                {% if message.extra_tags == "register_unsuccess" %}
+                  <div class="alert">
+                    <h4 class="alert-heading">Oppsss</h4>
+                    <p class="text-medium">
+                      {{ message }}
+                    </p>
+                  </div>
+                {% endif %}
+
+
+                {% if message.extra_tags == "invalid_password" %}
+                  <div class="alert">
+                    <h4 class="alert-heading">Invalid Password</h4>
+                    <p class="text-medium">
+                      {{ message }}
+                    </p>
+                  </div>
+                {% endif %}
+
+                {% if message.extra_tags == "all_fields_required" %}
+                  <div class="alert">
+                    <h4 class="alert-heading">Required</h4>
+                    <p class="text-medium">
+                      {{ message }}
+                    </p>
+                  </div>
+                {% endif %}
+
+
+                {% if message.extra_tags == "taken_username" %}
+                  <div class="alert">
+                    <h4 class="alert-heading">Taken</h4>
+                    <p class="text-medium">
+                      {{ message }}
+                    </p>
+                  </div>
+                {% endif %}
+
+              {% endfor %}
+              </div>
+              <h6 class="mb-15">Sign Up Form</h6>
+              <p class="text-sm mb-25">
+                Start creating the best possible user experience for you
+                customers.
+              </p>
+              <form action="{% url 'auth_register' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-12">
+                    <div class="input-style-1">
+                      <label id="{{ form.username.id_for_label }}">Username</label>
+                      {{ form.username }}
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-style-1">
+                      <label id="{{ form.first_name.id_for_label }}">{{ form.first_name.label | striptags }}</label>
+                      {{ form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-style-1">
+                      <label id="{{ form.last_name.id_for_label }}">{{ form.last_name.label | striptags }}</label>
+                      {{ form.last_name }}
+                    </div>
+                  </div>
+                  <!-- end col -->
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="input-style-1">
+                        <label id="{{ form.password1.id_for_label }}">Password</label>
+                        {{ form.password1 }}
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-style-1">
+                        <label id="{{ form.password2.id_for_label }}">Confirm Password</label>
+                        {{ form.password2 }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end col -->
+                  <div class="col-xxl-6 col-lg-12 col-md-6">
+                    <div class="form-check checkbox-style mb-30">
+                      <input class="form-check-input" type="checkbox" value="" id="checkbox-remember" checked />
+                      <label class="form-check-label" for="checkbox-remember">
+                       Accept terms & Condition</label>
+                    </div>
+                  </div>
+                  <!-- end col -->
+                 
+                  <!-- end col -->
+                  <div class="col-12">
+                    <div class="button-group d-flex justify-content-center flex-wrap">
+                      <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">
+                        Sign Up
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- end row -->
+              </form>
+              <div class="singin-option pt-40">
+                <p class="text-sm text-medium text-dark text-center">
+                  Already have an account?
+                  <a href="{% url 'auth_login' %}">Login here</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+  </section>
+{% endblock %}
